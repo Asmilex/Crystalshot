@@ -5,8 +5,13 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     Rigidbody2D rb2d;
-    private float moveSpeed = 3;
-    private float JumpSpeed = 9;
+
+    [Range(1,10)]
+    public float moveSpeed = 3;
+    
+    [Range(1, 10)]
+    public float JumpSpeed = 9;
+    
     bool isGrounded = true;
 
     // Start is called before the first frame update
