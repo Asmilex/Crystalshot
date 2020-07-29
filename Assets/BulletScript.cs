@@ -58,7 +58,7 @@ public class BulletScript : MonoBehaviour
             }
             else if (bounces_left == 0) {
                 enable_despawn = true;
-                rb.velocity = rb.velocity * 0;
+                rb.bodyType = RigidbodyType2D.Static;
             }
         }
         else if (hit_info.gameObject.GetInstanceID() == shooter.GetInstanceID()) {
@@ -74,6 +74,9 @@ public class BulletScript : MonoBehaviour
         }
         if (despawn_remaining_time <= 0) {
             Destroy(gameObject);
+
+            if (shooter.GetComponent<PlayerController>().bullets_avaliable < PlayerController.max_bullets)
+                shooter.GetComponent<PlayerController>().bullets_avaliable++;
         }
     }
 
