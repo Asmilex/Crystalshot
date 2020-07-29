@@ -14,14 +14,16 @@ public class BulletScript : MonoBehaviour
     public float speed = 20f;
 
     public Rigidbody2D rb;
+    private Vector2 ultima_velocidad;
     public GameObject impact_effect;
+    private GameObject shooter;
 
 //
 // ────────────────────────────────────────────────────────────────── DESPAWN ─────
 //
 
     public bool enable_despawn = false;
-    public const float despawn_time = 3f;
+    public const float despawn_time = 5f;
     public float despawn_remaining_time;
 
 //
@@ -33,49 +35,39 @@ public class BulletScript : MonoBehaviour
     void Start()
     {
         despawn_remaining_time = despawn_time;
-        bounces_left = bounces_total;
+        bounces_left           = bounces_total;
 
+        rb = GetComponent<Rigidbody2D>();
+
+        //FIXME - Modificar con la dirección a la que se apunta.
         rb.velocity = transform.right * speed;
-
-        // FIXME - Cambiar cuando se cumplan las condiciones de despawneo. Mirar Máquina Estados Finitos.
-        enable_despawn = true;
     }
 
 //
 // ─────────────────────────────────────────────────────────────── COLISIONES ─────
 //
-    /*
-        Si es un jugador -> destruir la bala. Se hace en OnTriggerEnter2D, ya que no se hará nada más.
-        Si es pared -> Mirar rebotes. Se hace en OnColliderEnter2D.
-    */
 
-    void OnTriggerEnter2D(Collider2D hit_info) {
-        Debug.Log("Colisión detectada");
+    void OnCollisionEnter2D (Collision2D hit_info) {
+        if (hit_info.gameObject.CompareTag("Wall")) {
+            if (bounces_left > 0) {
+                Vector2 _wallNormal = hit_info.GetContact(0).normal;
+                Vector2 direction = Vector2.Reflect(ultima_velocidad, _wallNormal).normalized;
 
-        // FIXME - Determinar el nombre del jugador
-        /* Player player = hit_info.GetComponent<Player>();
-
-        if (player != null) {
-            player.take_damage(1);
-
-            Instantiate(impact_effect, transform.position, transform.rotation);
-
-            Destroy(gameObject);
-        } */
-
+                rb.velocity = direction * speed;
+                bounces_left--;
+            }
+            else if (bounces_left == 0) {
+                enable_despawn = true;
+                rb.velocity = rb.velocity * 0;
+            }
+        }
+        else if (hit_info.gameObject.GetInstanceID() == shooter.GetInstanceID()) {
+            if (shooter.GetComponent<PlayerController>().bullets_avaliable < PlayerController.max_bullets) {
+                Destroy(gameObject);
+                shooter.GetComponent<PlayerController>().bullets_avaliable++;
+            }
+        }
     }
-
-    void OnColliderEnter2D(Collision2D hit_info) {
-        //Debug.Log("Colisión detectada");
-
-        /* Pared pared = hit_info.collider.GetComponent<Pared>();
-
-        if (pared != null) {
-            var bounce_direction = Vector3.Reflect(rb.velocity.normalized, hit_info.GetContact(0).normal);
-            rb.velocity = bounce_direction * Mathf.Max(speed, 0f);
-        }*/
-    }
-
     void FixedUpdate() {
         if (enable_despawn) {
             despawn_remaining_time -= Time.deltaTime;
@@ -83,5 +75,12 @@ public class BulletScript : MonoBehaviour
         if (despawn_remaining_time <= 0) {
             Destroy(gameObject);
         }
+    }
+
+    void Update() {
+        ultima_velocidad = rb.velocity;
+    }
+    public void assign_parent_id(GameObject padre) {
+        shooter = padre;
     }
 }
