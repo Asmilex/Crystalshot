@@ -14,10 +14,17 @@ public class PlayerController : MonoBehaviour
 
     bool isGrounded = true;
 
+
+
+    public const int max_bullets = 3;
+    public int bullets_avaliable;
+
+
     // Start is called before the first frame update
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
+        bullets_avaliable = max_bullets;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -65,7 +72,5 @@ public class PlayerController : MonoBehaviour
             //Here goes jump animation
             rb2d.velocity = new Vector2(rb2d.velocity.x, JumpSpeed);
         }
-
-
     }
 }
