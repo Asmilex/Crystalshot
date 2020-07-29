@@ -8,10 +8,10 @@ public class PlayerController : MonoBehaviour
 
     [Range(1,10)]
     public float moveSpeed = 3;
-    
+
     [Range(1, 10)]
     public float JumpSpeed = 9;
-    
+
     bool isGrounded = true;
 
     // Start is called before the first frame update
