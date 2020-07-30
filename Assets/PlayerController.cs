@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb2d;
     public LayerMask groundLayer;
     public LayerMask playerLayer;
+    public SpriteRenderer sprite;
 
     [Header("Horizontal Movement")]
     [Range(15, 35)]
@@ -56,6 +57,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
         rb2d = GetComponent<Rigidbody2D>();
+        sprite = GetComponent<SpriteRenderer>();
         bullets_avaliable = max_bullets;
     }
 
@@ -179,6 +181,9 @@ public class PlayerController : MonoBehaviour
         rb2d.velocity = new Vector2(rb2d.velocity.x, 0);
         rb2d.AddForce(Vector2.up * jumpSpeed, ForceMode2D.Impulse);
         jumpTimer = 0;
+
+        // Squeeze
+        StartCoroutine(JumpSqueeze(0.5f, 1.2f, 0.1f));
     }
 
     private void modifyPhysics() {
@@ -204,6 +209,26 @@ public class PlayerController : MonoBehaviour
             else if(rb2d.velocity.y > 0 && !isJumping) {
                 rb2d.gravityScale = gravity * (fallMultiplier / 2);
             }
+        }
+    }
+
+    // Jump squeeze
+    IEnumerator JumpSqueeze(float xSqueeze, float ySqueeze, float seconds) {
+        Vector2 originalSize = Vector2.one;
+        Vector2 newSize = new Vector2(xSqueeze, ySqueeze);
+        
+        float t = 0f;
+        while(t <= 1.0) {
+            t += Time.deltaTime / seconds;
+            sprite.transform.localScale = Vector2.Lerp(originalSize, newSize, t);
+            yield return null;
+        }
+
+        t = 0f;
+        while(t <= 1.0) {
+            t += Time.deltaTime / seconds;
+            sprite.transform.localScale = Vector2.Lerp(newSize, originalSize, t);
+            yield return null;
         }
     }
 }
