@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour {
@@ -12,18 +13,23 @@ public class Weapon : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
+
     }
 
-    // Update is called once per frame
     void Update() {
-        /* if (Input.GetButtonDown("Fire1") && player.GetComponent<PlayerController>().bullets_avaliable > 0) {
-            shoot();
+        if (Shoot_button_pressed() && player.GetComponent<PlayerController>().bullets_avaliable > 0) {
+            var bala = shoot();
+            bala.SendMessage("assign_parent_id", player);
             player.GetComponent<PlayerController>().bullets_avaliable--;
-        } */
+        }
     }
 
-    void shoot() {
-        var bala = Instantiate(bullet_prefab, fire_point.position, fire_point.rotation);
-        bala.SendMessage("assign_parent_id", player);
+    GameObject shoot() {
+        return Instantiate(bullet_prefab, fire_point.position, fire_point.rotation);
     }
+
+    public bool Shoot_button_pressed() {
+        return player.GetComponent<PlayerController>().Shooting_button_pressed();
+    }
+
 }

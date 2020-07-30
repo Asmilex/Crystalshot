@@ -20,12 +20,7 @@ public class PlayerController : MonoBehaviour
 // ─────────────────────────────────────────────────────────────────── INPUTS ─────
 //
     private Vector2 input_vector = new Vector2(0, 0);
-    // BA => Button Activated
-    private bool jump_BA;
-    private bool dash_BA;
-    private bool shoot_BA;
-
-
+    private Input_Player actions;
 
     public const int max_bullets = 3;
     public int bullets_avaliable;
@@ -37,6 +32,17 @@ public class PlayerController : MonoBehaviour
         bullets_avaliable = max_bullets;
     }
 
+    private void Awake() {
+        actions = new Input_Player();
+    }
+
+    private void OnEnable() {
+        actions.Enable();
+    }
+
+    private void OnDisable() {
+        actions.Disable();
+    }
     void OnCollisionEnter2D(Collision2D collision) {
 
     }
@@ -51,25 +57,11 @@ public class PlayerController : MonoBehaviour
 
     private void Update() {
         Walk();
+        input_vector = actions.Cube.Movement.ReadValue<Vector2>();
     }
 
-    public void Movement_handler(InputAction.CallbackContext context) {
-        input_vector = context.ReadValue<Vector2>();
-        Debug.Log("Valores (x, y) :" + input_vector.x.ToString() + ", " + input_vector.y.ToString());
-    }
-
-    public void Jump_handler(InputAction.CallbackContext action) {
-        jump_BA = action.performed;
-        Debug.Log("Salto pulsado: " + action.performed);
-    }
-
-    public void Dash_handler(InputAction.CallbackContext action) {
-        dash_BA = action.performed;
-        Debug.Log("Dash pulsada: " + action.performed);
-    }
-    public void Shoot_handler(InputAction.CallbackContext action) {
-        shoot_BA = action.performed;
-        Debug.Log("Shoot pulsada: " + action.performed);
+    public bool Shooting_button_pressed() {
+        return actions.Cube.Shoot.triggered;
     }
 
 

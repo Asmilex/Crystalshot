@@ -28,19 +28,19 @@ public class @Input_Player : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Dash"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""92f97ccc-8bc0-4599-9520-f88c62628116"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
                 },
                 {
                     ""name"": ""Shoot"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""0c59c46e-d67d-4d18-8a05-150efd9bb40e"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """"
+                    ""interactions"": ""Tap""
                 },
                 {
                     ""name"": ""Block"",
@@ -96,7 +96,7 @@ public class @Input_Player : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a669c441-7d9d-497c-9977-4da37b4d5825"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -107,7 +107,7 @@ public class @Input_Player : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""b85f3ecc-6955-4f0a-904b-c5c36d594426"",
-                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
