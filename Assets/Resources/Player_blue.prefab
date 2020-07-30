@@ -161,6 +161,7 @@ MonoBehaviour:
   gravity: 1
   fallMultiplier: 5
   onGround: 0
+  health: 3
   bullets_avaliable: 0
 --- !u!114 &5067428310721865954
 MonoBehaviour:
@@ -381,7 +382,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 23fec7f80f5d8a943a27105459241b30, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2fbd1a66afefcb0438bce14804b22eff, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
