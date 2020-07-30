@@ -159,13 +159,11 @@ public class PlayerController : MonoBehaviour
 
 
     private void Rotate_shield() {
-        var new_angle = Vector2.Angle(RJoystick, Vector2.up);
+        if (RJoystick != Vector2.zero) {
+            var new_angle = -Vector2.SignedAngle(RJoystick, Vector2.up);
 
-        if (RJoystick.x > 0) {
-            new_angle = -new_angle;
+            shield.eulerAngles = new Vector3(shield.eulerAngles.x, shield.eulerAngles.y, new_angle);
         }
-
-        shield.eulerAngles = new Vector3(shield.eulerAngles.x, shield.eulerAngles.y, new_angle);
     }
 
     private void Walk() {
