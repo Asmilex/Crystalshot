@@ -30,14 +30,20 @@ public class PlayerController : MonoBehaviour
     [Header("Collision")]
     public bool onGround = false;
 
+
+    [SerializeField]
+    public const int max_health = 3;
+    public int health = max_health;
+
+    public const int max_bullets = 3;
+    public int bullets_avaliable;
+
 //
 // ─────────────────────────────────────────────────────────────────── INPUTS ─────
 //
     private Vector2 RJoystick;
     private Input_Player actions;
 
-    public const int max_bullets = 3;
-    public int bullets_avaliable;
 
 
     // Start is called before the first frame update
@@ -95,6 +101,19 @@ public class PlayerController : MonoBehaviour
     public bool Shooting_button_pressed() {
         return actions.Cube.Shoot.triggered;
     }
+
+    public void Damage_taken() {
+        if (health > 0) {
+            // TODO Animación de impacto
+            health--;
+        }
+
+        if (health == 0) {
+            Destroy(gameObject);
+            // TODO animación de haber si me muero
+        }
+    }
+
 
     private void Rotate_shield() {
         var new_angle = Vector2.Angle(RJoystick, Vector2.up);
