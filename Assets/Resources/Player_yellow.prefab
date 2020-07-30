@@ -151,9 +151,14 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 2048
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  sprite: {fileID: 0}
   moveSpeed: 3
   direction: {x: 0, y: 0}
   jumpSpeed: 12
+  jumpDelay: 0.15
   isJumping: 0
   shield: {fileID: 5067428311629141567}
   maxSpeed: 10

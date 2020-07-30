@@ -130,16 +130,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5067428310721865955, guid: d33f09d4d60eee94c8b2c3d98d2e8cd8,
-        type: 3}
-      propertyPath: jumpDelay
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 5067428310721865955, guid: d33f09d4d60eee94c8b2c3d98d2e8cd8,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5067428310721865956, guid: d33f09d4d60eee94c8b2c3d98d2e8cd8,
         type: 3}
       propertyPath: m_Name
