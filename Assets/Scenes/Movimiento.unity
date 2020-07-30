@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 104875476}
   - component: {fileID: 104875478}
   - component: {fileID: 104875479}
+  - component: {fileID: 104875480}
   m_Layer: 8
   m_Name: player
   m_TagString: Untagged
@@ -226,7 +227,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -272,6 +273,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   JumpSpeed: 9
+  groundCheck: {fileID: 508028983}
   bullets_avaliable: 0
 --- !u!114 &104875479
 MonoBehaviour:
@@ -289,6 +291,20 @@ MonoBehaviour:
   bullet_prefab: {fileID: 5102568940911767638, guid: e621bdbb395656c4a9a6599fcd284b49,
     type: 3}
   player: {fileID: 104875473}
+--- !u!114 &104875480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 104875473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dc06ed1ff010ac4c96d19d76d22cb54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fallMultiplier: 2.5
+  lowJumpMultiplier: 2
 --- !u!1 &311628352
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,7 +373,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 498550554}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.06, y: -0.29, z: 0}
+  m_LocalPosition: {x: 1.028, y: -0.014, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 104875475}
@@ -387,7 +403,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 508028982}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.03, y: -0.51, z: 0}
+  m_LocalPosition: {x: -0.046, y: -0.524, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 104875475}

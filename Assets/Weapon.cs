@@ -16,10 +16,10 @@ public class Weapon : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (Input.GetButtonDown("Fire1") && player.GetComponent<PlayerController>().bullets_avaliable > 0) {
+        /* if (Input.GetButtonDown("Fire1") && player.GetComponent<PlayerController>().bullets_avaliable > 0) {
             shoot();
             player.GetComponent<PlayerController>().bullets_avaliable--;
-        }
+        } */
     }
 
     void shoot() {

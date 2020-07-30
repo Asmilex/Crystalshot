@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,9 +11,19 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 3;
 
     [Range(1, 10)]
-    public float JumpSpeed = 9;
+    public float JumpSpeed = 500f;
 
-    bool isGrounded = true;
+    [SerializeField]
+    Transform groundCheck;
+
+//
+// ─────────────────────────────────────────────────────────────────── INPUTS ─────
+//
+    private Vector2 input_vector = new Vector2(0, 0);
+    // BA => Button Activated
+    private bool jump_BA;
+    private bool dash_BA;
+    private bool shoot_BA;
 
 
 
@@ -21,56 +32,48 @@ public class PlayerController : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         rb2d = GetComponent<Rigidbody2D>();
         bullets_avaliable = max_bullets;
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        Debug.Log("Entered");
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = true;
-        }
+    void OnCollisionEnter2D(Collision2D collision) {
+
     }
 
-    void OnCollisionExit2D(Collision2D collision)
-    {
-        Debug.Log("Exited");
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = false;
-        }
+    void OnCollisionExit2D(Collision2D collision) {
+
     }
 
-    //Put physica based movement in here
-    private void FixedUpdate()
-    {
+    private void FixedUpdate() {
 
-        if (Input.GetKey("d"))
-        {
-            //Here goes walking to right animation
-            rb2d.velocity = new Vector2(moveSpeed, rb2d.velocity.y);
-        }
-        else if (Input.GetKey("a"))
-        {
-            //Here goes walking to left animation
-            rb2d.velocity = new Vector2(-moveSpeed, rb2d.velocity.y);
-        }
-        else
-        {
-            //Here goes walking stand by animation
-            rb2d.velocity = new Vector2(0, rb2d.velocity.y);
+    }
 
-        }
+    private void Update() {
+        Walk();
+    }
+
+    public void Movement_handler(InputAction.CallbackContext context) {
+        input_vector = context.ReadValue<Vector2>();
+        Debug.Log("Valores (x, y) :" + input_vector.x.ToString() + ", " + input_vector.y.ToString());
+    }
+
+    public void Jump_handler(InputAction.CallbackContext action) {
+        jump_BA = action.performed;
+        Debug.Log("Salto pulsado: " + action.performed);
+    }
+
+    public void Dash_handler(InputAction.CallbackContext action) {
+        dash_BA = action.performed;
+        Debug.Log("Dash pulsada: " + action.performed);
+    }
+    public void Shoot_handler(InputAction.CallbackContext action) {
+        shoot_BA = action.performed;
+        Debug.Log("Shoot pulsada: " + action.performed);
+    }
 
 
-        if (Input.GetKey("space") && isGrounded)
-        {
-            //Here goes jump animation
-            rb2d.velocity = new Vector2(rb2d.velocity.x, JumpSpeed);
-        }
+    private void Walk() {
+        rb2d.velocity = new Vector2(moveSpeed * input_vector.x, rb2d.velocity.y);
     }
 }
