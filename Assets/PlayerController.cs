@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Components")]
     public Rigidbody2D rb2d;
+    public LayerMask groundLayer;
 
     [Header("Horizontal Movement")]
     [Range(15, 35)]
@@ -14,15 +15,20 @@ public class PlayerController : MonoBehaviour
     public Vector2 direction;
 
     [Header("Jump")]
-    [Range(1, 10)]
-    public float JumpSpeed = 500f;
+    [Range(10, 15)]
+    public float jumpSpeed = 12f;
+    public bool isJumping = false;
 
-    [SerializeField]
     public Transform shield;
 
     [Header("Physics")]
     public float maxSpeed = 10f;
     public float linearDrag = 7f;
+    public float gravity = 3;
+    public float fallMultiplier = 5;
+
+    [Header("Collision")]
+    public bool onGround = false;
 
 //
 // ─────────────────────────────────────────────────────────────────── INPUTS ─────
@@ -42,6 +48,16 @@ public class PlayerController : MonoBehaviour
 
     private void Awake() {
         actions = new Input_Player();
+        actions.Cube.Jump.started += ctx => OnJumpStart();
+        actions.Cube.Jump.canceled += ctx => OnJumpStop();
+    }
+
+    private void OnJumpStart() {
+        isJumping = true;
+    }
+
+    private void OnJumpStop() {
+        isJumping = false;
     }
 
     private void OnEnable() {
@@ -51,27 +67,29 @@ public class PlayerController : MonoBehaviour
     private void OnDisable() {
         actions.Disable();
     }
-    void OnCollisionEnter2D(Collision2D collision) {
-
-    }
-
-    void OnCollisionExit2D(Collision2D collision) {
-
-    }
 
     private void FixedUpdate() {
-        Walk();
         modifyPhysics();
     }
 
     private void Update() {
         Walk();
+
+        // Ground check
+        onGround = rb2d.IsTouchingLayers(groundLayer);
+
+        // Read controls
         direction = actions.Cube.Movement.ReadValue<Vector2>();
         RJoystick = actions.Cube.RJoystick.ReadValue<Vector2>();
 
-
+        // Shield
         Rotate_shield();
         shield.position = transform.position;
+
+        // Jumps
+        if(actions.Cube.Jump.triggered && onGround) {
+            Jump();
+        }
     }
 
     public bool Shooting_button_pressed() {
@@ -97,14 +115,34 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void Jump() {
+        rb2d.velocity = new Vector2(rb2d.velocity.x, 0);
+        rb2d.AddForce(Vector2.up * jumpSpeed, ForceMode2D.Impulse);
+    }
+
     private void modifyPhysics() {
         bool changingDirections = (direction.x > 0 && rb2d.velocity.x < 0) || (direction.x < 0 && rb2d.velocity.x > 0);
 
-        if(Mathf.Abs(direction.x) < 0.4f || changingDirections) {
-            rb2d.drag = linearDrag;
+        // Horizontal movement
+        if(onGround) {
+            if(Mathf.Abs(direction.x) < 0.4f || changingDirections) {
+                rb2d.drag = linearDrag;
+            }
+            else {
+                rb2d.drag = 0f;
+            }
+            rb2d.gravityScale = 0;
         }
+        // Jump
         else {
-            rb2d.drag = 0f;
+            rb2d.gravityScale = gravity;
+            rb2d.drag = linearDrag * 0.15f;
+            if(rb2d.velocity.y < 0) {
+                rb2d.gravityScale = gravity * fallMultiplier;
+            }
+            else if(rb2d.velocity.y > 0 && !isJumping) {
+                rb2d.gravityScale = gravity * (fallMultiplier / 2);
+            }
         }
     }
 }
