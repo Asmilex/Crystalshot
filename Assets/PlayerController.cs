@@ -46,6 +46,8 @@ public class PlayerController : MonoBehaviour
     private int bullets_on_cooldown_size = 3;
     public float bullet_respawn_time = 5f;
 
+    public GameObject controlador;
+
 //
 // ─────────────────────────────────────────────────────────────────── INPUTS ─────
 //
@@ -59,6 +61,8 @@ public class PlayerController : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         bullets_avaliable = max_bullets;
+
+        controlador.GetComponent<Game_controller>().add_player(gameObject);
     }
 
     private void Awake() {
@@ -145,10 +149,7 @@ public class PlayerController : MonoBehaviour
             health--;
         }
 
-        if (health == 0) {
-            Destroy(gameObject);
-            // TODO animación de haber si me muero
-        }
+        controlador.GetComponent<Game_controller>().update_health(gameObject);
     }
 
     public void Add_bullet_to_CD() {
@@ -216,7 +217,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator JumpSqueeze(float xSqueeze, float ySqueeze, float seconds) {
         Vector2 originalSize = Vector2.one;
         Vector2 newSize = new Vector2(xSqueeze, ySqueeze);
-        
+
         float t = 0f;
         while(t <= 1.0) {
             t += Time.deltaTime / seconds;

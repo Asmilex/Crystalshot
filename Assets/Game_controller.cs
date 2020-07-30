@@ -1,13 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Collections;
 using UnityEngine;
 
 public class Game_controller : MonoBehaviour
 {
 
 
-    List<(int, int)> jugadores = new List<(int, int)>(); // Stores (instanceID, health)
+    List<GameObject> jugadores = new List<GameObject>(); // Stores (instanceID, health)
     // Start is called before the first frame update
     void Start()
     {
@@ -20,10 +19,22 @@ public class Game_controller : MonoBehaviour
 
     }
 
-    public void update_health((int, int) player_health) {
-        for (int i = 0; i < jugadores.Capacity; i++) {
-            if (player_health.Item1 == jugadores[i].Item1) {
-                jugadores[i] = player_health;
+    public void add_player(GameObject player) {
+        jugadores.Add(player);
+    }
+
+    public void update_health(GameObject jugador) {
+        for (int i = 0; i < jugadores.Count; i++) {
+            if (jugadores[i].GetInstanceID() == jugador.GetInstanceID()) {
+                if (jugadores[i].GetComponent<PlayerController>().health == 0) {
+                    Destroy(jugador);
+                    Debug.Log("F en el debug para " + jugador.ToString() );
+
+                    jugadores.Remove(jugadores[i]);
+                }
+                else {
+                    jugadores[i] = jugador;
+                }
             }
         }
     }
