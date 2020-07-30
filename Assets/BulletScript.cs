@@ -68,7 +68,7 @@ public class BulletScript : MonoBehaviour
                 bounces_left--;
             }
             else if (bounces_left == 0) {
-                enable_despawn = true;
+                enable_despawn = true;          // Check FixecUpdate to control the despawn timings
                 rb.bodyType = RigidbodyType2D.Static;
             }
         }
@@ -77,31 +77,61 @@ public class BulletScript : MonoBehaviour
                 Destroy(gameObject);
                 shooter.GetComponent<PlayerController>().bullets_avaliable++;
             }
+
+            // NOTE Ojo, la bala tiene físicas e interaccionará con el jugador cuando esté inactiva.
+            // Considerar un cambio de capa cuando esté en este estado con físicas desactivadas. Pero esto puede
+            // producir otras consecuencias. Hay que tener ojo.
         }
         else if (hit_info.gameObject.CompareTag("Player")) {                            // Last condition ensures it is a different player
-            if (rb.bodyType != RigidbodyType2D.Static) {                                // La bala está en movimiento => Hacer daño
+            if (rb.bodyType != RigidbodyType2D.Static) {                                // Bullet moving => Apply damage
                 hit_info.gameObject.GetComponent<PlayerController>().Damage_taken();
-                shooter.GetComponent<PlayerController>().bullets_avaliable++;
 
+                shooter.GetComponent<PlayerController>().bullets_avaliable
+                  = (shooter.GetComponent<PlayerController>().bullets_avaliable < PlayerController.max_bullets)
+                  ? shooter.GetComponent<PlayerController>().bullets_avaliable + 1
+                  : PlayerController.max_bullets;
+;
                 Debug.Log("He impactado en " + hit_info);
 
                 Destroy(gameObject);
                 // TODO Animación
-            } else {                                                                    // La bala está parada => recoger
-                // TODO
-                ;
+            }
+            else {                                                                    // Bullet stuck on wall => check if you can pick it up
+                if (hit_info.gameObject.GetComponent<PlayerController>().bullets_avaliable < PlayerController.max_bullets) {
+                    hit_info.gameObject.GetComponent<PlayerController>().bullets_avaliable++;
+                }
+
+                // Destroy the bullet anyway
+                Destroy(gameObject);
+                shooter.GetComponent<PlayerController>().Add_bullet_to_CD();
+                // FIXME - ojo, esta última línea me huele raro. Posiblemente haya que reworkear la lógica.
             }
         }
     }
     void FixedUpdate() {
         if (enable_despawn) {
             despawn_remaining_time -= Time.deltaTime;
+
+            if (shooter.GetComponent<PlayerController>().bullets_avaliable == PlayerController.max_bullets) {
+                // Transition to inactive
+
+                // FIXME cambiar animación
+
+            }
         }
         if (despawn_remaining_time <= 0) {
             Destroy(gameObject);
 
             if (shooter.GetComponent<PlayerController>().bullets_avaliable < PlayerController.max_bullets)
                 shooter.GetComponent<PlayerController>().bullets_avaliable++;
+        }
+
+        // Check if player has max bullets while one of his is stuck on the wall
+        if (rb.bodyType == RigidbodyType2D.Static
+            && shooter.GetComponent<PlayerController>().bullets_avaliable == PlayerController.max_bullets) {
+
+            // TODO - Transicionar a animación de bala neutra
+            // TODO - Transicionar a cooldown de despawn neutro
         }
     }
 

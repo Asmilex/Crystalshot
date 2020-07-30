@@ -38,6 +38,10 @@ public class PlayerController : MonoBehaviour
     public const int max_bullets = 3;
     public int bullets_avaliable;
 
+    private float[] bullets_on_cooldown = new float [3] {0f, 0f, 0f};
+    private int bullets_on_cooldown_size = 3;
+    public float bullet_respawn_time = 5f;
+
 //
 // ─────────────────────────────────────────────────────────────────── INPUTS ─────
 //
@@ -76,6 +80,28 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate() {
         modifyPhysics();
+
+        // Handle respawn in case there are any bullets on cooldown.
+        // Check first if you shouldn't have any cooldowns active; that is, you have stolen a bullet
+        if (bullets_avaliable == max_bullets) {
+            for (int i = 0; i < bullets_on_cooldown_size; i++) {
+                bullets_on_cooldown[i] = 0;
+            }
+        }
+        // Otherwise decrease the remaining time accordingly if you have any on cooldown
+        else {
+            for (int i = 0; i < bullets_on_cooldown_size; i++) {
+                if (bullets_on_cooldown[i] > 0) {
+                    bullets_on_cooldown[i] -= Time.deltaTime;
+
+                    if (bullets_on_cooldown[i] <= 0) {      // Once any of them reaches 0, update the bullet count if pertinent
+                        bullets_avaliable = (bullets_avaliable < max_bullets) ? bullets_avaliable + 1 : max_bullets;
+                        bullets_on_cooldown[i] = 0;
+                    }
+                }
+
+            }
+        }
     }
 
     private void Update() {
@@ -111,6 +137,14 @@ public class PlayerController : MonoBehaviour
         if (health == 0) {
             Destroy(gameObject);
             // TODO animación de haber si me muero
+        }
+    }
+
+    public void Add_bullet_to_CD() {
+        for (int i = 0; i < bullets_on_cooldown_size; i++) {
+            if (bullets_on_cooldown[i] == 0) {
+                bullets_on_cooldown[i] = bullet_respawn_time;
+            }
         }
     }
 
