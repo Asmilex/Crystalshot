@@ -16,7 +16,7 @@ public class Weapon : MonoBehaviour {
 
     void Update() {
         if (Shoot_button_pressed() && player.GetComponent<PlayerController>().bullets_avaliable > 0) {
-            if (!Firepoint_inside_ground() && !Firepoint_inside_wall()) {
+            if (Can_be_fired()) {
                 var bala = shoot();
                 bala.SendMessage("assign_parent_id", player);
                 player.GetComponent<PlayerController>().bullets_avaliable--;
@@ -28,16 +28,20 @@ public class Weapon : MonoBehaviour {
         return Instantiate(bullet_prefab, fire_point.position, fire_point.rotation);
     }
 
-    bool Firepoint_inside_wall() {
-        // FIXME - Cambiar la dirección del disparo con el input
-        return Physics2D.Raycast(fire_point.position, Vector2.right, 0.1f, LayerMask.NameToLayer("Wall")).collider;
-    }
+    bool Can_be_fired() {
+        var angle = player.GetComponent<PlayerController>().shield.eulerAngles.z + 90;
+        var raycast_direction = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)).normalized;
 
-    bool Firepoint_inside_ground() {
-        // FIXME - Cambiar la dirección con el input
-        RaycastHit2D rayo = Physics2D.Raycast(player.GetComponent<Transform>().position, Vector2.right, 1f, 1 << LayerMask.NameToLayer("Ground"));
+        Debug.DrawRay(player.GetComponent<Transform>().position, raycast_direction, Color.red, 3);
 
-        return rayo.collider;
+        RaycastHit2D rayo = Physics2D.Raycast(
+              player.GetComponent<Transform>().position
+            , raycast_direction
+            , 1.5f
+            , 1 << LayerMask.NameToLayer("Ground") | 1 << LayerMask.NameToLayer("Wall")
+        );
+
+        return !rayo.collider;
     }
 
     public bool Shoot_button_pressed() {
