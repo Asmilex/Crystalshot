@@ -5,21 +5,25 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    Rigidbody2D rb2d;
+    [Header("Components")]
+    public Rigidbody2D rb2d;
 
-    [Range(1,10)]
-    public float moveSpeed = 3;
+    [Header("Horizontal Movement")]
+    [Range(15, 35)]
+    public float moveSpeed = 20f;
+    public Vector2 direction;
 
+    [Header("Jump")]
     [Range(1, 10)]
     public float JumpSpeed = 500f;
 
-    [SerializeField]
-    Transform groundCheck;
+    [Header("Physics")]
+    public float maxSpeed = 10f;
+    public float linearDrag = 7f;
 
 //
 // ─────────────────────────────────────────────────────────────────── INPUTS ─────
 //
-    private Vector2 input_vector = new Vector2(0, 0);
     private Input_Player actions;
 
     public const int max_bullets = 3;
@@ -52,12 +56,12 @@ public class PlayerController : MonoBehaviour
     }
 
     private void FixedUpdate() {
-
+        Walk();
+        modifyPhysics();
     }
 
     private void Update() {
-        Walk();
-        input_vector = actions.Cube.Movement.ReadValue<Vector2>();
+        direction = actions.Cube.Movement.ReadValue<Vector2>();
     }
 
     public bool Shooting_button_pressed() {
@@ -66,6 +70,22 @@ public class PlayerController : MonoBehaviour
 
 
     private void Walk() {
-        rb2d.velocity = new Vector2(moveSpeed * input_vector.x, rb2d.velocity.y);
+        rb2d.AddForce(Vector2.right * moveSpeed * direction.x);
+
+        // Max speed
+        if(Mathf.Abs(rb2d.velocity.x) > maxSpeed) {
+            rb2d.velocity = new Vector2(Mathf.Sign(rb2d.velocity.x) * maxSpeed, rb2d.velocity.y);
+        }
+    }
+
+    private void modifyPhysics() {
+        bool changingDirections = (direction.x > 0 && rb2d.velocity.x < 0) || (direction.x < 0 && rb2d.velocity.x > 0);
+
+        if(Mathf.Abs(direction.x) < 0.4f || changingDirections) {
+            rb2d.drag = linearDrag;
+        }
+        else {
+            rb2d.drag = 0f;
+        }
     }
 }
