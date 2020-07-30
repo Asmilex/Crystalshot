@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [Header("Components")]
     public Rigidbody2D rb2d;
     public LayerMask groundLayer;
+    public LayerMask playerLayer;
 
     [Header("Horizontal Movement")]
     [Range(15, 35)]
@@ -17,8 +18,10 @@ public class PlayerController : MonoBehaviour
     [Header("Jump")]
     [Range(10, 15)]
     public float jumpSpeed = 12f;
+    public float jumpDelay = 0.15f;
     public bool isJumping = false;
-
+    private float jumpTimer;
+    
     public Transform shield;
 
     [Header("Physics")]
@@ -70,13 +73,18 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate() {
         modifyPhysics();
+        
+        // Coyote time
+        if(jumpTimer > Time.time && onGround) {
+            Jump();
+        }
     }
 
     private void Update() {
         Walk();
 
         // Ground check
-        onGround = rb2d.IsTouchingLayers(groundLayer);
+        onGround = (rb2d.IsTouchingLayers(groundLayer)) || (rb2d.IsTouchingLayers(playerLayer));
 
         // Read controls
         direction = actions.Cube.Movement.ReadValue<Vector2>();
@@ -86,9 +94,9 @@ public class PlayerController : MonoBehaviour
         Rotate_shield();
         shield.position = transform.position;
 
-        // Jumps
-        if(actions.Cube.Jump.triggered && onGround) {
-            Jump();
+        // Jump
+        if(actions.Cube.Jump.triggered) {
+            jumpTimer = Time.time + jumpDelay;
         }
     }
 
@@ -118,6 +126,7 @@ public class PlayerController : MonoBehaviour
     private void Jump() {
         rb2d.velocity = new Vector2(rb2d.velocity.x, 0);
         rb2d.AddForce(Vector2.up * jumpSpeed, ForceMode2D.Impulse);
+        jumpTimer = 0;
     }
 
     private void modifyPhysics() {

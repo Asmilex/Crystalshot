@@ -151,9 +151,13 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 2048
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
   moveSpeed: 3
   direction: {x: 0, y: 0}
   jumpSpeed: 12
+  jumpDelay: 0.15
   isJumping: 0
   shield: {fileID: 5067428311629141567}
   maxSpeed: 10
@@ -161,7 +165,6 @@ MonoBehaviour:
   gravity: 1
   fallMultiplier: 5
   onGround: 0
-  health: 3
   bullets_avaliable: 0
 --- !u!114 &5067428310721865954
 MonoBehaviour:
