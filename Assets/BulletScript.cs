@@ -78,6 +78,20 @@ public class BulletScript : MonoBehaviour
                 shooter.GetComponent<PlayerController>().bullets_avaliable++;
             }
         }
+        else if (hit_info.gameObject.CompareTag("Player")) {                            // Last condition ensures it is a different player
+            if (rb.bodyType != RigidbodyType2D.Static) {                                // La bala está en movimiento => Hacer daño
+                hit_info.gameObject.GetComponent<PlayerController>().Damage_taken();
+                shooter.GetComponent<PlayerController>().bullets_avaliable++;
+
+                Debug.Log("He impactado en " + hit_info);
+
+                Destroy(gameObject);
+                // TODO Animación
+            } else {                                                                    // La bala está parada => recoger
+                // TODO
+                ;
+            }
+        }
     }
     void FixedUpdate() {
         if (enable_despawn) {
