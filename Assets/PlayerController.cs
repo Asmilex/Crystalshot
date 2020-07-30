@@ -27,8 +27,7 @@ public class PlayerController : MonoBehaviour
 //
 // ─────────────────────────────────────────────────────────────────── INPUTS ─────
 //
-    private Vector2 input_vector = new Vector2(0, 0);
-    private Vector2 RJoystick = new Vector2(0, 0);
+    private Vector2 RJoystick;
     private Input_Player actions;
 
     public const int max_bullets = 3;
@@ -67,14 +66,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update() {
         Walk();
-        input_vector = actions.Cube.Movement.ReadValue<Vector2>();
+        direction = actions.Cube.Movement.ReadValue<Vector2>();
         RJoystick = actions.Cube.RJoystick.ReadValue<Vector2>();
 
 
         Rotate_shield();
         shield.position = transform.position;
-
-        Debug.Log("RJ: (" + RJoystick.x + ", " + RJoystick.y + ")");
     }
 
     public bool Shooting_button_pressed() {
