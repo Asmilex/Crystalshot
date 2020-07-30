@@ -57,6 +57,14 @@ public class @Input_Player : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""RJoystick"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""1574a8e2-4e2d-436c-92dd-b958563d2e34"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -224,6 +232,17 @@ public class @Input_Player : IInputActionCollection, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9061d21f-c03a-4fe4-aa96-ff244d8fb94d"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RJoystick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -237,6 +256,7 @@ public class @Input_Player : IInputActionCollection, IDisposable
         m_Cube_Shoot = m_Cube.FindAction("Shoot", throwIfNotFound: true);
         m_Cube_Block = m_Cube.FindAction("Block", throwIfNotFound: true);
         m_Cube_Movement = m_Cube.FindAction("Movement", throwIfNotFound: true);
+        m_Cube_RJoystick = m_Cube.FindAction("RJoystick", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -291,6 +311,7 @@ public class @Input_Player : IInputActionCollection, IDisposable
     private readonly InputAction m_Cube_Shoot;
     private readonly InputAction m_Cube_Block;
     private readonly InputAction m_Cube_Movement;
+    private readonly InputAction m_Cube_RJoystick;
     public struct CubeActions
     {
         private @Input_Player m_Wrapper;
@@ -300,6 +321,7 @@ public class @Input_Player : IInputActionCollection, IDisposable
         public InputAction @Shoot => m_Wrapper.m_Cube_Shoot;
         public InputAction @Block => m_Wrapper.m_Cube_Block;
         public InputAction @Movement => m_Wrapper.m_Cube_Movement;
+        public InputAction @RJoystick => m_Wrapper.m_Cube_RJoystick;
         public InputActionMap Get() { return m_Wrapper.m_Cube; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -324,6 +346,9 @@ public class @Input_Player : IInputActionCollection, IDisposable
                 @Movement.started -= m_Wrapper.m_CubeActionsCallbackInterface.OnMovement;
                 @Movement.performed -= m_Wrapper.m_CubeActionsCallbackInterface.OnMovement;
                 @Movement.canceled -= m_Wrapper.m_CubeActionsCallbackInterface.OnMovement;
+                @RJoystick.started -= m_Wrapper.m_CubeActionsCallbackInterface.OnRJoystick;
+                @RJoystick.performed -= m_Wrapper.m_CubeActionsCallbackInterface.OnRJoystick;
+                @RJoystick.canceled -= m_Wrapper.m_CubeActionsCallbackInterface.OnRJoystick;
             }
             m_Wrapper.m_CubeActionsCallbackInterface = instance;
             if (instance != null)
@@ -343,6 +368,9 @@ public class @Input_Player : IInputActionCollection, IDisposable
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
+                @RJoystick.started += instance.OnRJoystick;
+                @RJoystick.performed += instance.OnRJoystick;
+                @RJoystick.canceled += instance.OnRJoystick;
             }
         }
     }
@@ -354,5 +382,6 @@ public class @Input_Player : IInputActionCollection, IDisposable
         void OnShoot(InputAction.CallbackContext context);
         void OnBlock(InputAction.CallbackContext context);
         void OnMovement(InputAction.CallbackContext context);
+        void OnRJoystick(InputAction.CallbackContext context);
     }
 }

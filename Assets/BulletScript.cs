@@ -13,10 +13,6 @@ public class BulletScript : MonoBehaviour
 
     public float speed = 20f;
 
-    public Rigidbody2D rb;
-    private Vector2 ultima_velocidad;
-    public GameObject impact_effect;
-    private GameObject shooter;
 
 //
 // ────────────────────────────────────────────────────────────────── DESPAWN ─────
@@ -25,6 +21,17 @@ public class BulletScript : MonoBehaviour
     public bool enable_despawn = false;
     public const float despawn_time = 5f;
     public float despawn_remaining_time;
+
+
+//
+// ────────────────────────────────────────────────────────────────── OBJETOS ─────
+//
+
+    public Rigidbody2D rb;
+    private Vector2 ultima_velocidad;
+    public GameObject impact_effect;
+    private GameObject shooter;
+
 
 //
 // ──────────────────────────────────────────────────────────────── FUNCIONES ─────
@@ -39,8 +46,10 @@ public class BulletScript : MonoBehaviour
 
         rb = GetComponent<Rigidbody2D>();
 
-        //FIXME - Modificar con la dirección a la que se apunta.
-        rb.velocity = transform.right * speed;
+        rb.velocity = transform.up * speed;
+
+        // Deshabilitar impacto con tu propio escudo
+        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), shooter.GetComponent<PlayerController>().shield.GetComponent<Collider2D>());
     }
 
 //
@@ -53,7 +62,9 @@ public class BulletScript : MonoBehaviour
                 Vector2 _wallNormal = hit_info.GetContact(0).normal;
                 Vector2 direction = Vector2.Reflect(ultima_velocidad, _wallNormal).normalized;
 
+                transform.Rotate(0, 0, Vector2.SignedAngle(ultima_velocidad, direction));
                 rb.velocity = direction * speed;
+
                 bounces_left--;
             }
             else if (bounces_left == 0) {
