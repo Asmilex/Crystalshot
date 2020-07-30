@@ -161,6 +161,7 @@ MonoBehaviour:
   gravity: 1
   fallMultiplier: 5
   onGround: 0
+  health: 3
   bullets_avaliable: 0
 --- !u!114 &5067428310721865954
 MonoBehaviour:
@@ -175,7 +176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fire_point: {fileID: 5067428311146342958}
-  bullet_prefab: {fileID: 5102568940911767638, guid: e621bdbb395656c4a9a6599fcd284b49,
+  bullet_prefab: {fileID: 5102568940911767638, guid: 2408a2b8aec2b754d922a19821815bd3,
     type: 3}
   player: {fileID: 5067428310721865956}
 --- !u!114 &5067428310721865965
