@@ -32,6 +32,9 @@ public class PlayerController : MonoBehaviour
     public bool dashing = false;
     private float dashTimer;
 
+    const float dash_time_reload = 0.5f;
+    float dash_cooldown = 0;
+
 
     [Header("Shield")]
     public Transform shield;
@@ -64,6 +67,7 @@ public class PlayerController : MonoBehaviour
 // ─────────────────────────────────────────────────────────────────── INPUTS ─────
 //
     private Vector2 RJoystick;
+
 
 
 
@@ -137,6 +141,13 @@ public class PlayerController : MonoBehaviour
         }
 
         // Dash timer
+        if (dash_cooldown > 0) {
+            dash_cooldown -= Time.deltaTime;
+            if (dash_cooldown < 0) {
+                dash_cooldown = 0;
+            }
+        }
+
         if(dashTimer <= Time.time && dashing) {
             rb2d.velocity = Vector2.zero;
             dashing = false;
@@ -151,7 +162,7 @@ public class PlayerController : MonoBehaviour
         wasOnGround = onGround || onPlayer;
         onGround = rb2d.IsTouchingLayers(groundLayer);
 
-        if(onGround) {
+        if(onGround && dash_cooldown == 0) {
             dashAvailable = true;
         }
 
@@ -239,6 +250,7 @@ public class PlayerController : MonoBehaviour
 
         // Dash movement
         rb2d.velocity = dashDirection;
+        dash_cooldown = dash_time_reload;
     }
 
     private void modifyPhysics() {
