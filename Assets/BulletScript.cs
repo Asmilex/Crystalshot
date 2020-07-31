@@ -32,7 +32,6 @@ public class BulletScript : MonoBehaviour
     public GameObject impact_effect;
     public GameObject shooter;
 
-
 //
 // ──────────────────────────────────────────────────────────────── FUNCIONES ─────
 //
@@ -76,6 +75,7 @@ public class BulletScript : MonoBehaviour
             if (shooter.GetComponent<PlayerController>().bullets_avaliable < PlayerController.max_bullets) {
                 Destroy(gameObject);
                 shooter.GetComponent<PlayerController>().bullets_avaliable++;
+                shooter.GetComponent<PlayerController>().ASPick_Ammo.Play();
             }
 
             // NOTE Ojo, la bala tiene físicas e interaccionará con el jugador cuando esté inactiva.
@@ -92,13 +92,13 @@ public class BulletScript : MonoBehaviour
                   : PlayerController.max_bullets;
 ;
                 Debug.Log("He impactado en " + hit_info);
-
                 Destroy(gameObject);
                 // TODO Animación
             }
             else {                                                                    // Bullet stuck on wall => check if you can pick it up
                 if (hit_info.gameObject.GetComponent<PlayerController>().bullets_avaliable < PlayerController.max_bullets) {
                     hit_info.gameObject.GetComponent<PlayerController>().bullets_avaliable++;
+                    shooter.GetComponent<PlayerController>().ASPick_Ammo.Play();
                 }
 
                 // Destroy the bullet anyway

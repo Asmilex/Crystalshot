@@ -65,6 +65,13 @@ public class PlayerController : MonoBehaviour
     private Vector2 RJoystick;
     private Input_Player actions;
 
+    public AudioSource ASShoots;
+    public AudioSource ASJump;
+    public AudioSource ASReflect;
+    public AudioSource ASPick_Ammo;
+    public AudioSource ASDash;
+    public AudioSource ASWalk;
+
 
 
     // Start is called before the first frame update
@@ -73,6 +80,16 @@ public class PlayerController : MonoBehaviour
         bullets_avaliable = max_bullets;
 
         controlador.GetComponent<Game_controller>().add_player(gameObject);
+       
+        //sonido
+        var aSources = GetComponents<AudioSource>();
+
+        ASDash = aSources[0];
+        ASPick_Ammo = aSources[1];
+        ASReflect = aSources[2];
+        ASShoots = aSources[3];
+        ASJump = aSources[4];
+        ASWalk = aSources[5];
     }
 
     private void Awake() {
@@ -134,6 +151,11 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        if (actions.Cube.Shoot.triggered && bullets_avaliable > 0)
+        {
+            ASShoots.Play();
+        }
+
         // Coyote time
         if(jumpTimer > Time.time && (onGround || onPlayer)) {
             Jump();
@@ -153,7 +175,7 @@ public class PlayerController : MonoBehaviour
         // FIXME: cuando dos jugadores colisionan en el aire pasan a tener gravedad cero
         wasOnGround = onGround || onPlayer;
         onGround = rb2d.IsTouchingLayers(groundLayer);
-
+       
         // Ground squeeze
         if(!wasOnGround && (onGround || onPlayer)) {
             StartCoroutine(JumpSqueeze(1.25f, 0.8f, 0.05f));
@@ -184,10 +206,15 @@ public class PlayerController : MonoBehaviour
     }
 
     public bool Shoot_button_pressed() {
+      
         return actions.Cube.Shoot.triggered;
     }
 
     public bool Shield_button_pressed() {
+        if(actions.Cube.Block.triggered)
+        {
+            ASReflect.Play();
+        }
         return actions.Cube.Block.triggered;
     }
 
@@ -221,7 +248,7 @@ public class PlayerController : MonoBehaviour
         rb2d.AddForce(Vector2.right * moveSpeed * direction.x);
 
         // Max speed
-        if((Mathf.Abs(rb2d.velocity.x) > maxSpeed) && !dashing) {
+        if (Mathf.Abs(rb2d.velocity.x) > maxSpeed) {
             rb2d.velocity = new Vector2(Mathf.Sign(rb2d.velocity.x) * maxSpeed, rb2d.velocity.y);
         }
     }
@@ -230,12 +257,15 @@ public class PlayerController : MonoBehaviour
         rb2d.velocity = new Vector2(rb2d.velocity.x, 0);
         rb2d.AddForce(Vector2.up * jumpSpeed, ForceMode2D.Impulse);
         jumpTimer = 0;
+        ASJump.Play();
 
         // Squeeze
         StartCoroutine(JumpSqueeze(0.5f, 1.2f, 0.1f));
     }
 
     private void Dash() {
+
+        ASDash.Play();
         // Dash direction
         if(direction.x > 0 && direction.y > 0) {
             dashDirection = new Vector2(1,1) * (Mathf.Sqrt(2)/2) * dashSpeed;
