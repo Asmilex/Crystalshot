@@ -112,6 +112,7 @@ public class BulletScript : MonoBehaviour
             // Bullet was parried => return it to sender!
 
             hit_info.gameObject.GetComponent<ShieldManager>().player.GetComponent<Weapon>().shoot_from_parry(bounces_left);
+            shooter.GetComponent<PlayerController>().Add_bullet_to_CD();
             Destroy(gameObject);
         }
     }
