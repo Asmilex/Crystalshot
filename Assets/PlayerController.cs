@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     public GameObject sprite;
 
     [Header("Horizontal Movement")]
-    [Range(15, 35)]
+    [Range(15, 75)]
     public float moveSpeed = 20f;
     public Vector2 direction;
 
@@ -67,6 +67,8 @@ public class PlayerController : MonoBehaviour
 // ─────────────────────────────────────────────────────────────────── INPUTS ─────
 //
     private Vector2 RJoystick;
+
+    public char color;
 
 
 
@@ -152,10 +154,12 @@ public class PlayerController : MonoBehaviour
             rb2d.velocity = Vector2.zero;
             dashing = false;
         }
+
+
+        Walk();
     }
 
     private void Update() {
-        Walk();
 
         // Ground check
         // FIXME: cuando dos jugadores colisionan en el aire pasan a tener gravedad cero

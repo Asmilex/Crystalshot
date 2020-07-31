@@ -166,7 +166,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   sprite: {fileID: 4050354659527233262}
-  moveSpeed: 35
+  moveSpeed: 45
   direction: {x: 0, y: 0}
   jumpSpeed: 10.02
   jumpDelay: 0.15
@@ -188,6 +188,7 @@ MonoBehaviour:
   bullet_respawn_time: 5
   controlador: {fileID: 8490947541769970214, guid: 58b143145a067874da1a94148c9908ef,
     type: 3}
+  color: 110
 --- !u!114 &4050354658469471458
 MonoBehaviour:
   m_ObjectHideFlags: 0
