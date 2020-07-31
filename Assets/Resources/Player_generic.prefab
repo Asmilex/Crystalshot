@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 4050354658469471459}
   - component: {fileID: 4050354658469471458}
   - component: {fileID: 4050354658469471457}
+  - component: {fileID: 2428946917334218605}
   m_Layer: 8
   m_Name: Player_generic
   m_TagString: Player
@@ -174,6 +175,7 @@ MonoBehaviour:
   dashDirection: {x: 0, y: 0}
   dashSpeed: 30
   dashDuration: 0.1
+  dashing: 0
   shield: {fileID: 4050354659896002580}
   maxSpeed: 10
   linearDrag: 7
@@ -305,6 +307,22 @@ MonoBehaviour:
   m_DefaultActionMap: Cube
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &2428946917334218605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4050354658469471456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed17af46c7fdd6449a493e8f07b66aa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghostDelay: 0.00005
+  ghost: {fileID: 2056834286067817564, guid: b7b15f072c343a64ca188a1b038e44a4, type: 3}
+  sprite: {fileID: 4050354659527233262}
+  time: 0.2
 --- !u!1 &4050354659527233262
 GameObject:
   m_ObjectHideFlags: 0

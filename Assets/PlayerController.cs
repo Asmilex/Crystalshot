@@ -29,8 +29,9 @@ public class PlayerController : MonoBehaviour
     public Vector2 dashDirection;
     public float dashSpeed = 50f;
     public float dashDuration = 0.5f;
+    public bool dashing = false;
     private float dashTimer;
-    private bool dashing = false;
+
 
     [Header("Shield")]
     public Transform shield;
