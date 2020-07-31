@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class Game_controller : MonoBehaviour
 {
+    List<GameObject> jugadores = new List<GameObject>();
 
-
-    List<GameObject> jugadores = new List<GameObject>(); // Stores (instanceID, health)
-    // Start is called before the first frame update
     void Start()
     {
 
