@@ -151,10 +151,13 @@ public class PlayerController : MonoBehaviour
         wasOnGround = onGround || onPlayer;
         onGround = rb2d.IsTouchingLayers(groundLayer);
 
+        if(onGround) {
+            dashAvailable = true;
+        }
+
         // Ground squeeze
         if(!wasOnGround && (onGround || onPlayer)) {
             StartCoroutine(JumpSqueeze(1.25f, 0.8f, 0.05f));
-            dashAvailable = true;
         }
 
         // Read controls
