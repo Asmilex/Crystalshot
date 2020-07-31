@@ -30,7 +30,7 @@ public class BulletScript : MonoBehaviour
     public Rigidbody2D rb;
     private Vector2 ultima_velocidad;
     public GameObject impact_effect;
-    private GameObject shooter;
+    public GameObject shooter;
 
 
 //
@@ -42,6 +42,7 @@ public class BulletScript : MonoBehaviour
     void Start()
     {
         despawn_remaining_time = despawn_time;
+        bounces_left = bounces_total;
 
         rb = GetComponent<Rigidbody2D>();
 
@@ -71,7 +72,7 @@ public class BulletScript : MonoBehaviour
                 rb.bodyType = RigidbodyType2D.Static;
             }
         }
-        else if (hit_info.gameObject.GetInstanceID() == shooter.GetInstanceID()) {
+        else if (shooter != null && hit_info.gameObject.GetInstanceID() == shooter.GetInstanceID()) {
             if (shooter.GetComponent<PlayerController>().bullets_avaliable < PlayerController.max_bullets) {
                 Destroy(gameObject);
                 shooter.GetComponent<PlayerController>().bullets_avaliable++;
@@ -122,27 +123,33 @@ public class BulletScript : MonoBehaviour
         if (enable_despawn) {
             despawn_remaining_time -= Time.deltaTime;
 
-            if (shooter.GetComponent<PlayerController>().bullets_avaliable == PlayerController.max_bullets) {
+            if (shooter == null || (shooter != null && shooter.GetComponent<PlayerController>().bullets_avaliable == PlayerController.max_bullets)) {
                 // Transition to inactive
 
                 // FIXME cambiar animación
-
             }
         }
         if (despawn_remaining_time <= 0) {
             Destroy(gameObject);
 
-            if (shooter.GetComponent<PlayerController>().bullets_avaliable < PlayerController.max_bullets)
+            if (shooter != null && shooter.GetComponent<PlayerController>().bullets_avaliable < PlayerController.max_bullets)
                 shooter.GetComponent<PlayerController>().bullets_avaliable++;
         }
 
         // Check if player has max bullets while one of his is stuck on the wall
         if (rb.bodyType == RigidbodyType2D.Static
-            && shooter.GetComponent<PlayerController>().bullets_avaliable == PlayerController.max_bullets) {
+            && (shooter != null && shooter.GetComponent<PlayerController>().bullets_avaliable == PlayerController.max_bullets) ){
 
             // TODO - Transicionar a animación de bala neutra
             // TODO - Transicionar a cooldown de despawn neutro
         }
+    }
+
+    public void shooter_has_died() {
+        // Hacer estático, quitar rebotes, quitarle el shooter y pasar a modo despawn
+        bounces_left = 0;
+        shooter = null;
+
     }
 
     void Update() {

@@ -27,9 +27,18 @@ public class Game_controller : MonoBehaviour
         for (int i = 0; i < jugadores.Count; i++) {
             if (jugadores[i].GetInstanceID() == jugador.GetInstanceID()) {
                 if (jugadores[i].GetComponent<PlayerController>().health == 0) {
-                    Destroy(jugador);
                     Debug.Log("F en el debug para " + jugador.ToString() );
 
+                    var balas = GameObject.FindGameObjectsWithTag("Bullet");
+                    for (int j = 0; j < balas.Length; j++) {
+                        if ( balas[j].GetComponent<BulletScript>().shooter != null
+                            && balas[j].GetComponent<BulletScript>().shooter.GetInstanceID() == jugador.GetInstanceID())
+                        {
+                            balas[j].GetComponent<BulletScript>().shooter_has_died();
+                        }
+                    }
+                    // Decirle a las balas que han muerto
+                    Destroy(jugador);
                     jugadores.Remove(jugadores[i]);
                 }
                 else {
