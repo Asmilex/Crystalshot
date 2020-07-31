@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 using UnityEngine;
 
 public class ShieldManager : MonoBehaviour
@@ -17,10 +18,6 @@ public class ShieldManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Shield_button_pressed() && !was_active) {
-            activate_shield();
-        }
-
         if (parry_left > 0) {
             parry_left -= Time.deltaTime;
             was_active = true;
@@ -33,17 +30,15 @@ public class ShieldManager : MonoBehaviour
     }
 
     public void activate_shield() {
-        gameObject.layer = LayerMask.NameToLayer("Shield_active");
-        parry_left = parry_window;
-        Debug.Log("Shield activated by " + player.ToString());
+        if (!was_active) {
+            gameObject.layer = LayerMask.NameToLayer("Shield_active");
+            parry_left = parry_window;
+            Debug.Log("Shield activated by " + player.ToString());
+        }
     }
 
     void deactivate_shield() {
         gameObject.layer = LayerMask.NameToLayer("Shield_inactive");
         Debug.Log("Shield deactivated by " + player.ToString());
-    }
-
-    public bool Shield_button_pressed() {
-        return player.GetComponent<PlayerController>().Shield_button_pressed();
     }
 }
