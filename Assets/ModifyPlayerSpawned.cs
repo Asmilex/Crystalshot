@@ -11,6 +11,8 @@ public class ModifyPlayerSpawned : MonoBehaviour
     public GameObject player_prefab_3;
     public GameObject player_prefab_4;
 
+    public GameObject controlador;
+
     private GameObject[] prefabs = new GameObject[4];
     private int next_prefab = 1;
 
@@ -37,6 +39,8 @@ public class ModifyPlayerSpawned : MonoBehaviour
         Debug.Log("Player joined");
         gestor.playerPrefab = prefabs[next_prefab];
         next_prefab = (next_prefab+1)%4;
+
+
         Debug.Log("Next iter" + next_prefab);
     }
 }

@@ -84,8 +84,6 @@ public class PlayerController : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
         bullets_avaliable = max_bullets;
 
-        controlador.GetComponent<Game_controller>().add_player(gameObject);
-
         var aSources = GetComponents<AudioSource>();
 
         ASDash = aSources[0];
@@ -95,6 +93,8 @@ public class PlayerController : MonoBehaviour
         ASJump = aSources[4];
         ASWalk = aSources[5];
         ASHit = aSources[6];
+
+        controlador.GetComponent<Game_controller>().add_player(gameObject);
 
     }
 
@@ -235,6 +235,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Jump() {
+        ASJump.Play();
         rb2d.velocity = new Vector2(rb2d.velocity.x, 0);
         rb2d.AddForce(Vector2.up * jumpSpeed, ForceMode2D.Impulse);
         jumpTimer = 0;
@@ -334,7 +335,6 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnJump(InputValue valor) {
-        ASJump.Play();
         jumpTimer = Time.time + jumpDelay;
     }
 

@@ -36,16 +36,21 @@ public class Game_controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        //UpdateUI();
     }
 
     public void add_player(GameObject player) {
+        Debug.Log(player);
         jugadores.Add(player);
     }
 
     public void update_health(GameObject jugador) {
         for (int i = 0; i < jugadores.Count; i++) {
             if (jugadores[i].GetInstanceID() == jugador.GetInstanceID()) {
+
+                Debug.Log(jugador.GetComponent<PlayerController>().color);
+                //UpdateUI_Alt(jugador.GetComponent<PlayerController>().color, jugador.GetComponent<PlayerController>().health);
+
                 if (jugadores[i].GetComponent<PlayerController>().health == 0) {
                     Debug.Log("F en el debug para " + jugador.ToString() );
 
@@ -68,6 +73,39 @@ public class Game_controller : MonoBehaviour
         }
     }
 
+    void UpdateUI_Alt(char color, int vida_restante) {
+        int jugador;
+        Debug.Log(color);
+
+        if (color == 'b') {
+            jugador = 0;
+        }
+        else if (color == 'r') {
+            jugador = 1;
+        }
+        else if (color == 'g') {
+            jugador = 2;
+        }
+        else {
+            jugador = 3;
+        }
+
+        if (vida_restante != 0) {
+            Debug.Log("Jugador, vida " + jugador + vida_restante);
+            if (jugador == 0) {
+                heartsP1[vida_restante - 1].sprite = emptyLifeP1;
+            }
+            else if (jugador == 1) {
+                heartsP2[vida_restante - 1].sprite = emptyLifeP2;
+            }
+            else if (jugador == 2) {
+                heartsP3[vida_restante - 1].sprite = emptyLifeP3;
+            }
+            else if (jugador == 3) {
+                heartsP4[vida_restante - 1].sprite = emptyLifeP4;
+            }
+        }
+    }
     void UpdateUI() {
         for(int i = 0; i < jugadores.Count; ++i) {
             int health;
@@ -75,7 +113,8 @@ public class Game_controller : MonoBehaviour
             if(i == 0) {
                 health = jugadores[0].GetComponent<PlayerController>().health;
                 for(int j = 0; j < health; ++j) {
-                    if(i < health) {
+                    if(j < health) {
+                        Debug.Log("SE EJECUTA");
                         heartsP1[j].sprite = fullLifeP1;
                     }
                     else {
@@ -88,7 +127,7 @@ public class Game_controller : MonoBehaviour
             if(i == 1) {
                 health = jugadores[1].GetComponent<PlayerController>().health;
                 for(int j = 0; j < health; ++j) {
-                    if(i < health) {
+                    if(j < health) {
                         heartsP2[j].sprite = fullLifeP2;
                     }
                     else {
@@ -101,7 +140,7 @@ public class Game_controller : MonoBehaviour
             if(i == 2) {
                 health = jugadores[2].GetComponent<PlayerController>().health;
                 for(int j = 0; j < health; ++j) {
-                    if(i < health) {
+                    if(j < health) {
                         heartsP3[j].sprite = fullLifeP3;
                     }
                     else {
@@ -114,7 +153,7 @@ public class Game_controller : MonoBehaviour
             if(i == 3) {
                 health = jugadores[3].GetComponent<PlayerController>().health;
                 for(int j = 0; j < health; ++j) {
-                    if(i < health) {
+                    if(j < health) {
                         heartsP4[j].sprite = fullLifeP4;
                     }
                     else {
