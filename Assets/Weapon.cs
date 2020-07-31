@@ -8,10 +8,13 @@ public class Weapon : MonoBehaviour {
     public Transform fire_point;
     public GameObject bullet_prefab;
     public GameObject player;
+    public AudioSource ASShoot;
+
 
     // Start is called before the first frame update
     void Start() {
-
+        var aSources = GetComponents<AudioSource>();
+        ASShoot = aSources[3];
     }
 
     void Update() {
@@ -48,6 +51,7 @@ public class Weapon : MonoBehaviour {
     void OnShoot(InputValue valor) {
         if (player.GetComponent<PlayerController>().bullets_avaliable > 0) {
             if (Can_be_fired()) {
+                ASShoot.Play();
                 var bala = shoot();
                 bala.GetComponent<BulletScript>().assign_parent_id(player);
                 player.GetComponent<PlayerController>().bullets_avaliable--;

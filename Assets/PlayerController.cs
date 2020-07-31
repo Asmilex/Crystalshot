@@ -64,7 +64,14 @@ public class PlayerController : MonoBehaviour
 //
     private Vector2 RJoystick;
 
-
+    //Sounds
+    public AudioSource ASShoots;
+    public AudioSource ASJump;
+    public AudioSource ASReflect;
+    public AudioSource ASPick_Ammo;
+    public AudioSource ASDash;
+    public AudioSource ASWalk;
+    public AudioSource ASHit;
 
     // Start is called before the first frame update
     void Start() {
@@ -72,6 +79,17 @@ public class PlayerController : MonoBehaviour
         bullets_avaliable = max_bullets;
 
         controlador.GetComponent<Game_controller>().add_player(gameObject);
+
+        var aSources = GetComponents<AudioSource>();
+
+        ASDash = aSources[0];
+        ASPick_Ammo = aSources[1];
+        ASReflect = aSources[2];
+        ASShoots = aSources[3];
+        ASJump = aSources[4];
+        ASWalk = aSources[5];
+        ASHit = aSources[6];
+
     }
 
     private void Awake() {
@@ -164,6 +182,7 @@ public class PlayerController : MonoBehaviour
 
     public void Damage_taken() {
         if (health > 0) {
+            ASHit.Play();
             // TODO Animación de impacto
             health--;
         }
@@ -296,17 +315,20 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnJump(InputValue valor) {
+        ASJump.Play();
         jumpTimer = Time.time + jumpDelay;
     }
 
     void OnBlock(InputValue valor) {
         if (valor.Get<float>() == 1) {
+            ASReflect.Play();
             gameObject.GetComponentInChildren<ShieldManager>().activate_shield();
         }
     }
 
     void OnDash(InputValue valor) {
         if (dashAvailable) {
+            ASDash.Play();
             dashTimer = Time.time + dashDuration;
             dashAvailable = false;
             dashing = true;
