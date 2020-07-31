@@ -24,6 +24,15 @@ public class PlayerController : MonoBehaviour
     private float jumpTimer;
     private bool wasOnGround;
 
+    [Header("Dash")]
+    public bool dashAvailable = true;
+    public Vector2 dashDirection;
+    public float dashSpeed = 50f;
+    public float dashDuration = 0.5f;
+    private float dashTimer;
+    private bool dashing = false;
+
+    [Header("Shield")]
     public Transform shield;
 
     [Header("Physics")]
@@ -68,6 +77,8 @@ public class PlayerController : MonoBehaviour
 
     private void Awake() {
         actions = new Input_Player();
+
+        // Jump events
         actions.Cube.Jump.started += ctx => OnJumpStart();
         actions.Cube.Jump.canceled += ctx => OnJumpStop();
     }
@@ -123,10 +134,15 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-
         // Coyote time
         if(jumpTimer > Time.time && (onGround || onPlayer)) {
             Jump();
+        }
+
+        // Dash timer
+        if(dashTimer <= Time.time && dashing) {
+            rb2d.velocity = Vector2.zero;
+            dashing = false;
         }
     }
 
@@ -141,6 +157,7 @@ public class PlayerController : MonoBehaviour
         // Ground squeeze
         if(!wasOnGround && (onGround || onPlayer)) {
             StartCoroutine(JumpSqueeze(1.25f, 0.8f, 0.05f));
+            dashAvailable = true;
         }
 
         // Read controls
@@ -154,6 +171,15 @@ public class PlayerController : MonoBehaviour
         // Jump
         if(actions.Cube.Jump.triggered) {
             jumpTimer = Time.time + jumpDelay;
+        }
+
+        // Dash
+        if(actions.Cube.Dash.triggered && dashAvailable) {
+            // Dash execution
+            dashTimer = Time.time + dashDuration;
+            dashAvailable = false;
+            dashing = true;
+            Dash();
         }
     }
 
@@ -195,7 +221,7 @@ public class PlayerController : MonoBehaviour
         rb2d.AddForce(Vector2.right * moveSpeed * direction.x);
 
         // Max speed
-        if(Mathf.Abs(rb2d.velocity.x) > maxSpeed) {
+        if((Mathf.Abs(rb2d.velocity.x) > maxSpeed) && !dashing) {
             rb2d.velocity = new Vector2(Mathf.Sign(rb2d.velocity.x) * maxSpeed, rb2d.velocity.y);
         }
     }
@@ -209,6 +235,37 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(JumpSqueeze(0.5f, 1.2f, 0.1f));
     }
 
+    private void Dash() {
+        // Dash direction
+        if(direction.x > 0 && direction.y > 0) {
+            dashDirection = new Vector2(1,1) * (Mathf.Sqrt(2)/2) * dashSpeed;
+        }
+        else if(direction.x > 0 && direction.y == 0) {
+            dashDirection = Vector2.right * dashSpeed;
+        }
+        else if(direction.x > 0 && direction.y < 0) {
+            dashDirection = new Vector2(1,-1) * (Mathf.Sqrt(2)/2) * dashSpeed;
+        }
+        else if(direction.x < 0 && direction.y > 0) {
+            dashDirection = new Vector2(-1,1) * (Mathf.Sqrt(2)/2) * dashSpeed;
+        }
+        else if(direction.x < 0 && direction.y == 0) {
+            dashDirection = Vector2.left * dashSpeed;
+        }
+        else if(direction.x < 0 && direction.y < 0) {
+            dashDirection = new Vector2(-1,-1) * (Mathf.Sqrt(2)/2) * dashSpeed;
+        }
+        else if(direction.x == 0 && direction.y > 0) {
+            dashDirection = Vector2.up * dashSpeed;
+        }
+        else if(direction.x == 0 && direction.y < 0) {
+            dashDirection = Vector2.down * dashSpeed;
+        }
+
+        // Dash movement
+        rb2d.velocity = dashDirection;
+    }
+
     private void modifyPhysics() {
         bool changingDirections = (direction.x > 0 && rb2d.velocity.x < 0) || (direction.x < 0 && rb2d.velocity.x > 0);
 
@@ -220,6 +277,10 @@ public class PlayerController : MonoBehaviour
             else {
                 rb2d.drag = 0f;
             }
+            rb2d.gravityScale = 0;
+        }
+        // Dash
+        else if(dashing) {
             rb2d.gravityScale = 0;
         }
         // Jump
