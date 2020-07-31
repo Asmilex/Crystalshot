@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb2d;
     public LayerMask groundLayer;
     public LayerMask playerLayer;
-    public SpriteRenderer sprite;
+    public GameObject sprite;
 
     [Header("Horizontal Movement")]
     [Range(15, 35)]
@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     public float jumpDelay = 0.15f;
     public bool isJumping = false;
     private float jumpTimer;
+    private bool wasOnGround;
 
     public Transform shield;
 
@@ -34,11 +35,11 @@ public class PlayerController : MonoBehaviour
     [Header("Collision")]
     public bool onGround = false;
 
-
-    [SerializeField]
+    [Header("Health")]
     public const int max_health = 3;
     public int health = max_health;
 
+    [Header("Bullets")]
     public const int max_bullets = 3;
     public int bullets_avaliable;
 
@@ -59,7 +60,6 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
         rb2d = GetComponent<Rigidbody2D>();
-        sprite = GetComponent<SpriteRenderer>();
         bullets_avaliable = max_bullets;
 
         controlador.GetComponent<Game_controller>().add_player(gameObject);
@@ -123,7 +123,14 @@ public class PlayerController : MonoBehaviour
         Walk();
 
         // Ground check
+        // FIXME: cuando dos jugadores colisionan en el aire pasan a tener gravedad cero
+        wasOnGround = onGround;
         onGround = (rb2d.IsTouchingLayers(groundLayer)) || (rb2d.IsTouchingLayers(playerLayer));
+
+        // Ground squeeze
+        if(!wasOnGround && onGround) {
+            StartCoroutine(JumpSqueeze(1.25f, 0.8f, 0.05f));
+        }
 
         // Read controls
         direction = actions.Cube.Movement.ReadValue<Vector2>();
