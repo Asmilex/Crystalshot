@@ -63,7 +63,6 @@ public class PlayerController : MonoBehaviour
 // ─────────────────────────────────────────────────────────────────── INPUTS ─────
 //
     private Vector2 RJoystick;
-    private Input_Player actions;
 
     public AudioSource ASShoots;
     public AudioSource ASJump;
@@ -93,11 +92,8 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Awake() {
-        actions = new Input_Player();
 
         // Jump events
-        actions.Cube.Jump.started += ctx => OnJumpStart();
-        actions.Cube.Jump.canceled += ctx => OnJumpStop();
     }
 
     private void OnJumpStart() {
@@ -109,11 +105,11 @@ public class PlayerController : MonoBehaviour
     }
 
     private void OnEnable() {
-        actions.Enable();
+
     }
 
     private void OnDisable() {
-        actions.Disable();
+
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
@@ -183,39 +179,9 @@ public class PlayerController : MonoBehaviour
         }
 
         // Read controls
-        direction = actions.Cube.Movement.ReadValue<Vector2>();
-        RJoystick = actions.Cube.RJoystick.ReadValue<Vector2>();
-
         // Shield
         Rotate_shield();
         shield.position = transform.position;
-
-        // Jump
-        if(actions.Cube.Jump.triggered) {
-            jumpTimer = Time.time + jumpDelay;
-        }
-
-        // Dash
-        if(actions.Cube.Dash.triggered && dashAvailable) {
-            // Dash execution
-            dashTimer = Time.time + dashDuration;
-            dashAvailable = false;
-            dashing = true;
-            Dash();
-        }
-    }
-
-    public bool Shoot_button_pressed() {
-      
-        return actions.Cube.Shoot.triggered;
-    }
-
-    public bool Shield_button_pressed() {
-        if(actions.Cube.Block.triggered)
-        {
-            ASReflect.Play();
-        }
-        return actions.Cube.Block.triggered;
     }
 
     public void Damage_taken() {
@@ -343,6 +309,33 @@ public class PlayerController : MonoBehaviour
             t += Time.deltaTime / seconds;
             sprite.transform.localScale = Vector2.Lerp(newSize, originalSize, t);
             yield return null;
+        }
+    }
+
+    void OnMovement(InputValue valor) {
+        direction = valor.Get<Vector2>();
+    }
+
+    void OnRJoystick(InputValue valor) {
+        RJoystick = valor.Get<Vector2>();
+    }
+
+    void OnJump(InputValue valor) {
+        jumpTimer = Time.time + jumpDelay;
+    }
+
+    void OnBlock(InputValue valor) {
+        if (valor.Get<float>() == 1) {
+            gameObject.GetComponentInChildren<ShieldManager>().activate_shield();
+        }
+    }
+
+    void OnDash(InputValue valor) {
+        if (dashAvailable) {
+            dashTimer = Time.time + dashDuration;
+            dashAvailable = false;
+            dashing = true;
+            Dash();
         }
     }
 }
