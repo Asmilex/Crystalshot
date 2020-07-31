@@ -18,7 +18,7 @@ public class Weapon : MonoBehaviour {
         if (Shoot_button_pressed() && player.GetComponent<PlayerController>().bullets_avaliable > 0) {
             if (Can_be_fired()) {
                 var bala = shoot();
-                bala.SendMessage("assign_parent_id", player);
+                bala.GetComponent<BulletScript>().assign_parent_id(player);
                 player.GetComponent<PlayerController>().bullets_avaliable--;
             }
         }
@@ -45,7 +45,14 @@ public class Weapon : MonoBehaviour {
     }
 
     public bool Shoot_button_pressed() {
-        return player.GetComponent<PlayerController>().Shooting_button_pressed();
+        return player.GetComponent<PlayerController>().Shoot_button_pressed();
     }
 
+    public void shoot_from_parry(int bounces_left) {
+        if (Can_be_fired()) {
+            var bala = shoot();
+            bala.GetComponent<BulletScript>().assign_parent_id(player);
+            bala.GetComponent<BulletScript>().bounces_left = bounces_left;
+        }
+    }
 }

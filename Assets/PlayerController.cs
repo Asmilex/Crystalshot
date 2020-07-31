@@ -139,8 +139,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public bool Shooting_button_pressed() {
+    public bool Shoot_button_pressed() {
         return actions.Cube.Shoot.triggered;
+    }
+
+    public bool Shield_button_pressed() {
+        return actions.Cube.Block.triggered;
     }
 
     public void Damage_taken() {

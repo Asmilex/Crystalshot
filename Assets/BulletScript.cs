@@ -42,7 +42,6 @@ public class BulletScript : MonoBehaviour
     void Start()
     {
         despawn_remaining_time = despawn_time;
-        bounces_left           = bounces_total;
 
         rb = GetComponent<Rigidbody2D>();
 
@@ -107,7 +106,17 @@ public class BulletScript : MonoBehaviour
                 // FIXME - ojo, esta última línea me huele raro. Posiblemente haya que reworkear la lógica.
             }
         }
+        else if ( hit_info.collider.gameObject.layer == LayerMask.NameToLayer("Shield_active")
+                 && hit_info.collider.gameObject.GetComponent<ShieldManager>().player.GetInstanceID() != shooter.GetInstanceID() )
+        {
+            // Bullet was parried => return it to sender!
+
+            hit_info.gameObject.GetComponent<ShieldManager>().player.GetComponent<Weapon>().shoot_from_parry(bounces_left);
+            Destroy(gameObject);
+        }
     }
+
+
     void FixedUpdate() {
         if (enable_despawn) {
             despawn_remaining_time -= Time.deltaTime;

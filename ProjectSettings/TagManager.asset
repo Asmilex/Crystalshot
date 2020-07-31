@@ -18,9 +18,9 @@ TagManager:
   - 
   - Player
   - Bullets
-  - Shield
+  - Shield_inactive
+  - Shield_active
   - Ground
-  - 
   - 
   - 
   - 
