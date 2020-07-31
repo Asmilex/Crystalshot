@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     public GameObject sprite;
 
     [Header("Horizontal Movement")]
-    [Range(15, 35)]
+    [Range(15, 75)]
     public float moveSpeed = 20f;
     public Vector2 direction;
 
@@ -29,8 +29,12 @@ public class PlayerController : MonoBehaviour
     public Vector2 dashDirection;
     public float dashSpeed = 50f;
     public float dashDuration = 0.5f;
+    public bool dashing = false;
     private float dashTimer;
-    private bool dashing = false;
+
+    const float dash_time_reload = 0.5f;
+    float dash_cooldown = 0;
+
 
     [Header("Shield")]
     public Transform shield;
@@ -64,6 +68,7 @@ public class PlayerController : MonoBehaviour
 //
     private Vector2 RJoystick;
 
+    public char color;
     //Sounds
     public AudioSource ASShoots;
     public AudioSource ASJump;
@@ -72,6 +77,7 @@ public class PlayerController : MonoBehaviour
     public AudioSource ASDash;
     public AudioSource ASWalk;
     public AudioSource ASHit;
+
 
     // Start is called before the first frame update
     void Start() {
@@ -154,24 +160,36 @@ public class PlayerController : MonoBehaviour
         }
 
         // Dash timer
+        if (dash_cooldown > 0) {
+            dash_cooldown -= Time.deltaTime;
+            if (dash_cooldown < 0) {
+                dash_cooldown = 0;
+            }
+        }
+
         if(dashTimer <= Time.time && dashing) {
             rb2d.velocity = Vector2.zero;
             dashing = false;
         }
+
+
+        Walk();
     }
 
     private void Update() {
-        Walk();
 
         // Ground check
         // FIXME: cuando dos jugadores colisionan en el aire pasan a tener gravedad cero
         wasOnGround = onGround || onPlayer;
         onGround = rb2d.IsTouchingLayers(groundLayer);
 
+        if(onGround && dash_cooldown == 0) {
+            dashAvailable = true;
+        }
+
         // Ground squeeze
         if(!wasOnGround && (onGround || onPlayer)) {
             StartCoroutine(JumpSqueeze(1.25f, 0.8f, 0.05f));
-            dashAvailable = true;
         }
 
         // Read controls
@@ -254,6 +272,7 @@ public class PlayerController : MonoBehaviour
 
         // Dash movement
         rb2d.velocity = dashDirection;
+        dash_cooldown = dash_time_reload;
     }
 
     private void modifyPhysics() {

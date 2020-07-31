@@ -19,7 +19,7 @@ public class BulletScript : MonoBehaviour
 //
 
     public bool enable_despawn = false;
-    public const float despawn_time = 5f;
+    public const float despawn_time = 8f;
     public float despawn_remaining_time;
 
 

@@ -1,20 +1,36 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Game_controller : MonoBehaviour
 {
     List<GameObject> jugadores = new List<GameObject>();
 
+    // UI
+    public int health = 3;
+    public int maxHealth = 3;
+
+    public Image[] hearts;
+    public Sprite fullLife;
+    public Sprite emptyLife;
+
     void Start()
     {
-
+        Screen.SetResolution(2048,1024, true);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(health > maxHealth) {
+            health = maxHealth;
+        }
 
+        for(int i = 0; i < hearts.Length; ++i) {
+            hearts[i].sprite = (i < health) ? fullLife : emptyLife;
+            hearts[i].enabled = (i < maxHealth) ? true : false; 
+        }
     }
 
     public void add_player(GameObject player) {
@@ -44,5 +60,9 @@ public class Game_controller : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void UpdateUI() {
+        health = jugadores[0].GetComponent<PlayerController>().health;
     }
 }
