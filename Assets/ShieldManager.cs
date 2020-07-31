@@ -30,15 +30,13 @@ public class ShieldManager : MonoBehaviour
     }
 
     public void activate_shield() {
-        if (!was_active) {
+        if (!was_active) {()
             gameObject.layer = LayerMask.NameToLayer("Shield_active");
             parry_left = parry_window;
-            Debug.Log("Shield activated by " + player.ToString());
         }
     }
 
     void deactivate_shield() {
         gameObject.layer = LayerMask.NameToLayer("Shield_inactive");
-        Debug.Log("Shield deactivated by " + player.ToString());
     }
 }

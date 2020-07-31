@@ -14,7 +14,6 @@ public class Game_controller : MonoBehaviour
         Screen.SetResolution(2048,1024, true);
 
         imagenes_canvas =  canvas.GetComponentsInChildren<Image>();
-        Debug.Log(imagenes_canvas.Length);
     }
 
     // Update is called once per frame
@@ -24,7 +23,6 @@ public class Game_controller : MonoBehaviour
     }
 
     public void add_player(GameObject player) {
-        Debug.Log(player);
         jugadores.Add(player);
     }
 

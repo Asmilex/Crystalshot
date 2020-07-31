@@ -15,8 +15,6 @@ public class ModifyPlayerSpawned : MonoBehaviour
 
     private GameObject[] prefabs = new GameObject[4];
     private int next_prefab = 1;
-
-    private int next_player_joined = 1;
     public PlayerInputManager gestor;
     void Start()
     {
@@ -36,11 +34,7 @@ public class ModifyPlayerSpawned : MonoBehaviour
     }
 
     void OnPlayerJoined() {
-        Debug.Log("Player joined");
         gestor.playerPrefab = prefabs[next_prefab];
         next_prefab = (next_prefab+1)%4;
-
-
-        Debug.Log("Next iter" + next_prefab);
     }
 }

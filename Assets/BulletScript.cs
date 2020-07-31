@@ -91,7 +91,6 @@ public class BulletScript : MonoBehaviour
                   = (shooter.GetComponent<PlayerController>().bullets_avaliable < PlayerController.max_bullets)
                   ? shooter.GetComponent<PlayerController>().bullets_avaliable + 1
                   : PlayerController.max_bullets;
-                Debug.Log("He impactado en " + hit_info);
 
                 Destroy(gameObject);
                 // TODO Animación
