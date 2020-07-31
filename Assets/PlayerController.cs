@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Collision")]
     public bool onGround = false;
+    public bool onPlayer = false;
 
     [Header("Health")]
     public const int max_health = 3;
@@ -87,6 +88,16 @@ public class PlayerController : MonoBehaviour
         actions.Disable();
     }
 
+    void OnCollisionEnter2D(Collision2D collision) {
+        if(rb2d.IsTouchingLayers(playerLayer) && collision.gameObject.transform.position.y < rb2d.transform.position.y) {
+            onPlayer = true;
+        }
+    }
+
+    void OnCollisionExit2D(Collision2D collision) {
+        onPlayer = false;
+    }
+
     private void FixedUpdate() {
         modifyPhysics();
 
@@ -114,7 +125,7 @@ public class PlayerController : MonoBehaviour
 
 
         // Coyote time
-        if(jumpTimer > Time.time && onGround) {
+        if(jumpTimer > Time.time && (onGround || onPlayer)) {
             Jump();
         }
     }
@@ -124,11 +135,11 @@ public class PlayerController : MonoBehaviour
 
         // Ground check
         // FIXME: cuando dos jugadores colisionan en el aire pasan a tener gravedad cero
-        wasOnGround = onGround;
-        onGround = (rb2d.IsTouchingLayers(groundLayer)) || (rb2d.IsTouchingLayers(playerLayer));
+        wasOnGround = onGround || onPlayer;
+        onGround = rb2d.IsTouchingLayers(groundLayer);
 
         // Ground squeeze
-        if(!wasOnGround && onGround) {
+        if(!wasOnGround && (onGround || onPlayer)) {
             StartCoroutine(JumpSqueeze(1.25f, 0.8f, 0.05f));
         }
 
