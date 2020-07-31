@@ -8,7 +8,7 @@ public class Game_controller : MonoBehaviour
 
     void Start()
     {
-
+        Screen.SetResolution(2048,1024, true);
     }
 
     // Update is called once per frame
