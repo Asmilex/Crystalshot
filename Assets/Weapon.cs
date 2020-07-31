@@ -3,28 +3,21 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
 
-
 public class Weapon : MonoBehaviour {
 
     public Transform fire_point;
     public GameObject bullet_prefab;
     public GameObject player;
-    public AudioSource ASShoot;
 
     // Start is called before the first frame update
     void Start() {
-        var aSources = GetComponents<AudioSource>();
-        ASShoot = aSources[3];
-
 
     }
 
     void Update() {
-
     }
 
     GameObject shoot() {
-        
         return Instantiate(bullet_prefab, fire_point.position, fire_point.rotation);
     }
 

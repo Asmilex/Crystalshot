@@ -31,9 +31,9 @@
                 },
                 {
                     "name": "Block",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "d234c228-814e-4457-a7e7-e006dc42f7d6",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
                 },
@@ -90,19 +90,8 @@
                 },
                 {
                     "name": "",
-                    "id": "aa2b149c-03c8-44bf-8150-e832daad7cfc",
-                    "path": "<Keyboard>/shift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Dash",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "a669c441-7d9d-497c-9977-4da37b4d5825",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -113,29 +102,7 @@
                 {
                     "name": "",
                     "id": "b85f3ecc-6955-4f0a-904b-c5c36d594426",
-                    "path": "<Gamepad>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Block",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "bbb65f5c-a9e9-470a-b5d1-271d0ecd0c97",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Block",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9e516045-864d-4dde-becc-98462ff6467d",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
