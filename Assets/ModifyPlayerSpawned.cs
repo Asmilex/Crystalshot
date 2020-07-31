@@ -11,12 +11,20 @@ public class ModifyPlayerSpawned : MonoBehaviour
     public GameObject player_prefab_3;
     public GameObject player_prefab_4;
 
+    private GameObject[] prefabs = new GameObject[4];
+    private int next_prefab = 1;
+
     private int next_player_joined = 1;
     public PlayerInputManager gestor;
     void Start()
     {
         gestor = GetComponent<PlayerInputManager>();
         gestor.playerPrefab = player_prefab_1;
+
+        prefabs[0] = player_prefab_1;
+        prefabs[1] = player_prefab_2;
+        prefabs[2] = player_prefab_3;
+        prefabs[3] = player_prefab_4;
     }
 
     // Update is called once per frame
@@ -26,17 +34,9 @@ public class ModifyPlayerSpawned : MonoBehaviour
     }
 
     void OnPlayerJoined() {
-        if (next_player_joined == 1) {
-            next_player_joined++;
-            gestor.playerPrefab = player_prefab_2;
-        }
-        if (next_player_joined == 2) {
-            next_player_joined++;
-            gestor.playerPrefab = player_prefab_3;
-        }
-        if (next_player_joined == 3) {
-            next_player_joined++;
-            gestor.playerPrefab = player_prefab_4;
-        }
+        Debug.Log("Player joined");
+        gestor.playerPrefab = prefabs[next_prefab];
+        next_prefab = (next_prefab+1)%4;
+        Debug.Log("Next iter" + next_prefab);
     }
 }
