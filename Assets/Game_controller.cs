@@ -7,13 +7,26 @@ public class Game_controller : MonoBehaviour
 {
     List<GameObject> jugadores = new List<GameObject>();
 
-    // UI
-    public int health = 3;
-    public int maxHealth = 3;
 
-    public Image[] hearts;
-    public Sprite fullLife;
-    public Sprite emptyLife;
+    // P1
+    public Image[] heartsP1;
+    public Sprite fullLifeP1;
+    public Sprite emptyLifeP1;
+
+    // P2
+    public Image[] heartsP2;
+    public Sprite fullLifeP2;
+    public Sprite emptyLifeP2;
+
+    // P3
+    public Image[] heartsP3;
+    public Sprite fullLifeP3;
+    public Sprite emptyLifeP3;
+
+    // P4
+    public Image[] heartsP4;
+    public Sprite fullLifeP4;
+    public Sprite emptyLifeP4;
 
     void Start()
     {
@@ -23,14 +36,7 @@ public class Game_controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(health > maxHealth) {
-            health = maxHealth;
-        }
 
-        for(int i = 0; i < hearts.Length; ++i) {
-            hearts[i].sprite = (i < health) ? fullLife : emptyLife;
-            hearts[i].enabled = (i < maxHealth) ? true : false; 
-        }
     }
 
     public void add_player(GameObject player) {
@@ -62,7 +68,60 @@ public class Game_controller : MonoBehaviour
         }
     }
 
-    public void UpdateUI() {
-        health = jugadores[0].GetComponent<PlayerController>().health;
+    void UpdateUI() {
+        for(int i = 0; i < jugadores.Count; ++i) {
+            int health;
+            // P1
+            if(i == 0) {
+                health = jugadores[0].GetComponent<PlayerController>().health;
+                for(int j = 0; j < health; ++j) {
+                    if(i < health) {
+                        heartsP1[j].sprite = fullLifeP1;
+                    }
+                    else {
+                        heartsP1[j].sprite = emptyLifeP1;
+                    }
+                }
+            }
+
+            // P2
+            if(i == 1) {
+                health = jugadores[1].GetComponent<PlayerController>().health;
+                for(int j = 0; j < health; ++j) {
+                    if(i < health) {
+                        heartsP2[j].sprite = fullLifeP2;
+                    }
+                    else {
+                        heartsP2[j].sprite = emptyLifeP2;
+                    }
+                }
+            }
+
+            // P3
+            if(i == 2) {
+                health = jugadores[2].GetComponent<PlayerController>().health;
+                for(int j = 0; j < health; ++j) {
+                    if(i < health) {
+                        heartsP3[j].sprite = fullLifeP3;
+                    }
+                    else {
+                        heartsP3[j].sprite = emptyLifeP3;
+                    }
+                }
+            }
+
+            // P4
+            if(i == 3) {
+                health = jugadores[3].GetComponent<PlayerController>().health;
+                for(int j = 0; j < health; ++j) {
+                    if(i < health) {
+                        heartsP4[j].sprite = fullLifeP4;
+                    }
+                    else {
+                        heartsP4[j].sprite = emptyLifeP4;
+                    }
+                }
+            }
+        }
     }
 }
