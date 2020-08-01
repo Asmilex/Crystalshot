@@ -1,14 +1,4 @@
 # Crystalshot
 
-## Folder Structure
-
-- **Assets**: todo lo que nosotros usemos
-    - **Scenes**: pantallas de juego
-    - **Sprites**
-      - **Players**
-      - **Maps**
-    - **Sounds**
-      - **Music**
-      - **SFX**
-    - **Animations**
-    - Plugins
+By Asmilex, Patch and DRUBRoxas for the Jueves JAM, a game 3 days long game JAM about Crystals
+Music from Shovel Knight (https://virt.bandcamp.com/) and Riot Games
